@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardParent"
+    style="@style/listingCardStyle">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_row_internal_margin"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2.5"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/countryNameTv"
+                style="@style/countryNameStyle" />
+
+            <TextView
+                android:id="@+id/countryCapitalTv"
+                style="@style/subTextStyle" />
+
+            <TextView
+                android:id="@+id/countryPopulationTv"
+                style="@style/subTextStyle" />
+
+            <TextView
+                android:id="@+id/countryCurrencyTv"
+                style="@style/subTextStyle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/detailsPageCTA"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/detail_arrow"
+                android:tint="@color/colorPrimary" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+

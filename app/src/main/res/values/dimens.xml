@@ -1,0 +1,10 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="first_element_offset">32dp</dimen>
+    <dimen name="details_elements_spacing">16dp</dimen>
+    <dimen name="standard_offset">8dp</dimen>
+    <dimen name="button_padding">32dp</dimen>
+    <dimen name="back_arrow_width">48dp</dimen>
+    <dimen name="item_row_vertical_margin">2dp</dimen>
+    <dimen name="item_row_internal_margin">12dp</dimen>
+</resources>
