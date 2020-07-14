@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,10 +63,10 @@
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/retry"
             android:layout_marginTop="@dimen/details_elements_spacing"
             android:paddingStart="@dimen/button_padding"
             android:paddingEnd="@dimen/button_padding"
+            android:text="@string/retry"
             android:textAppearance="@style/retryButtonText"
             android:textColor="@color/white_color" />
 
