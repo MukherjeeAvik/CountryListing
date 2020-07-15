@@ -2,6 +2,7 @@ package com.evaluation.digitas.coutryList.ui.countryList
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.evaluation.digitas.coutryList.R
@@ -65,7 +66,7 @@ class CountryListFragment : BaseFragment() {
         retryButton.setOnClickListener {
             reloadPage()
         }
-        regionHeader.text = "Countries from $region"
+        regionHeader.text = requireContext().getString(R.string.regionText, region)
     }
 
     companion object {

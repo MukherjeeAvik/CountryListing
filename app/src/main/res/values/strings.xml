@@ -15,4 +15,9 @@
     <string name="borders">Borders</string>
     <string name="languages">Languages</string>
     <string name="retry">Retry</string>
+
+    <string name ="regionText">Countries from %1$s</string>
+    <string name ="capitalText">Capital: %1$s</string>
+    <string name ="populationText">Population: %1$s</string>
+    <string name ="currenciesText">Currencies: %1$s</string>
 </resources>

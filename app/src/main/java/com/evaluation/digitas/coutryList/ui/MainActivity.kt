@@ -31,7 +31,7 @@ class MainActivity : BaseActivity() {
         mainViewModel.navigateToLandingPage(mainNavigator)
     }
 
-    fun observeRoutes() {
+    private fun observeRoutes() {
         mainViewModel.observeRoutes().observe(this, Observer { routes ->
             when (routes) {
                 is MainRoutes.Routes.gotoListingPage -> {
@@ -53,10 +53,5 @@ class MainActivity : BaseActivity() {
     }
 
     override fun getParentLayForSnackBar() = rootLay
-
-    override fun onNotifyError(errorMessage: String) {
-
-    }
-
 
 }

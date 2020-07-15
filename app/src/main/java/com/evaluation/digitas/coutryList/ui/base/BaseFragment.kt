@@ -11,6 +11,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import dagger.android.support.AndroidSupportInjection
+import okhttp3.internal.notify
 import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
@@ -30,28 +31,23 @@ abstract class BaseFragment : Fragment() {
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        if (context is BaseActivity) {
-
-            //getBaseActivity()?.onFragmentAttached(getFragmentTag())
-        }
     }
 
 
     override fun onDetach() {
         super.onDetach()
-        if (context is BaseActivity) {
-            //getBaseActivity()?.onFragmentDetached(getFragmentTag())
-        }
     }
 
     fun notifyUserThroughMessage(message: String){
-        (activity as BaseActivity).getParentLayForSnackBar()?.let {
-            (activity as BaseActivity).showError(it,message)
+        if(activity is BaseActivity) {
+            (activity as BaseActivity).onNotifyError(message)
         }
     }
 
     fun removeErrors(){
-        (activity as BaseActivity).hideError()
+        if(activity is BaseActivity) {
+            (activity as BaseActivity).removeErrorsIfAny()
+        }
     }
 
     abstract fun getFragmentTag(): String
@@ -93,5 +89,6 @@ abstract class BaseFragment : Fragment() {
 
     interface Callback {
         fun onNotifyError(errorMessage: String)
+        fun removeErrorsIfAny()
     }
 }

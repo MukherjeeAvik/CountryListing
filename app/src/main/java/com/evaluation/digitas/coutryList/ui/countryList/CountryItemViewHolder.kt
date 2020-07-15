@@ -15,12 +15,14 @@ class CountryItemViewHolder(itemView: View) : BaseViewHolder<CountryItem>(itemVi
     override fun loadData(receivedData: CountryItem) {
 
         itemView.countryNameTv.text = receivedData.name
-        itemView.countryCapitalTv.text = "Capital: " + receivedData.capital
+        itemView.countryCapitalTv.text =
+            itemView.context.getString(R.string.capitalText, receivedData.capital)
         if (receivedData.population == INCONSISTENT_VALUE.toString()) {
             itemView.countryPopulationTv.hide()
         } else {
             itemView.countryPopulationTv.show()
-            itemView.countryPopulationTv.text = "Population : " + receivedData.population
+            itemView.countryPopulationTv.text =
+                itemView.context.getString(R.string.populationText, receivedData.population)
         }
 
         var currencies = ""
@@ -31,7 +33,8 @@ class CountryItemViewHolder(itemView: View) : BaseViewHolder<CountryItem>(itemVi
             itemView.countryCurrencyTv.hide()
         else {
             itemView.countryCurrencyTv.show()
-            itemView.countryCurrencyTv.text = "Currencies : " + currencies.substringBeforeLast(",")
+            itemView.countryCurrencyTv.text =
+                itemView.context.getString(R.string.currenciesText, currencies.substringBeforeLast(","))
         }
 
         itemView.detailsPageCTA.setOnClickListener {
@@ -40,7 +43,7 @@ class CountryItemViewHolder(itemView: View) : BaseViewHolder<CountryItem>(itemVi
     }
 
     companion object {
-        fun Create(
+        fun create(
             parent: ViewGroup,
             callBack: ItemClickedCallback<CountryItem>?
         ): CountryItemViewHolder {

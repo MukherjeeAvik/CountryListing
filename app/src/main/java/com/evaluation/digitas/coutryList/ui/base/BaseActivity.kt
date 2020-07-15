@@ -49,7 +49,7 @@ abstract class BaseActivity : DaggerAppCompatActivity(), BaseFragment.Callback {
     abstract fun getLifeCycleObserver(): LifecycleObserver
 
 
-    fun showError(rootView: View, message: String) {
+    protected fun showError(rootView: View, message: String) {
         val snackbarText = SpannableStringBuilder()
         snackbarText.bold { appendln(OFFLINE) }
         snackbarText.append(message)
@@ -69,11 +69,20 @@ abstract class BaseActivity : DaggerAppCompatActivity(), BaseFragment.Callback {
         snackbar?.show()
     }
 
-    fun hideError() {
+    protected fun hideError() {
         snackbar?.dismiss()
     }
 
     abstract fun getParentLayForSnackBar(): View?
+    override fun onNotifyError(errorMessage: String) {
+        getParentLayForSnackBar()?.let {
+            showError(it,message = errorMessage )
+        }
+    }
+
+    override fun removeErrorsIfAny() {
+        hideError()
+    }
 }
 
 

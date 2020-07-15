@@ -15,7 +15,7 @@ class CountryListAdapter @Inject constructor() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryItemViewHolder {
-        return CountryItemViewHolder.Create(parent, callback_)
+        return CountryItemViewHolder.create(parent, callback_)
     }
 
     override fun onBindViewHolder(holder: CountryItemViewHolder, position: Int) {
