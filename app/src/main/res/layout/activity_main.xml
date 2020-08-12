@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rootLay"
-    tools:context="com.evaluation.digitas.coutryList.ui.MainActivity">
+    tools:context="com.githubExamples.mvvm.architecture.ui.MainActivity">
 
     <include layout="@layout/content_main" />
 
