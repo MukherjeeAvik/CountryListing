@@ -2,15 +2,15 @@ package com.githubExamples.mvvm.architecture.ui
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.githubExamples.mvvm.acrhitecture.R
-import com.githubExamples.mvvm.architecture.logging.LogMaster
 import com.githubExamples.mvvm.architecture.navigation.MainNavigator
-import com.githubExamples.mvvm.architecture.navigation.MainRoutes
+import com.githubExamples.mvvm.architecture.navigation.Routes
 import com.githubExamples.mvvm.architecture.ui.base.BaseActivity
-import kotlinx.android.synthetic.main.activity_main.*
 import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
@@ -28,26 +28,33 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(this, providerFactory).get(MainViewModel::class.java)
+        mainNavigator.openListingPage(R.id.fragmentContainer, false)
         observeRoutes()
-        mainViewModel.navigateToLandingPage(mainNavigator)
+        mainViewModel.registerNavigationRoutes(Routes.GotoListingPage)
 
     }
 
     private fun observeRoutes() {
-        mainViewModel.observeRoutes().observe(this, Observer { routes ->
-            when (routes) {
-                is MainRoutes.Routes.gotoListingPage -> {
-                    mainNavigator.openListingPage(R.id.fragmentContainer, false)
+        lifecycleScope.launchWhenCreated {
+            mainViewModel.observeNavigationStates().collect { routes ->
+                when (routes) {
+                    is Routes.GotoListingPage -> {
+                        mainNavigator.openListingPage(R.id.fragmentContainer, false)
+                    }
+                    is Routes.GotoDetailsPage -> {
+                        mainNavigator.openDetailsPage(
+                            R.id.fragmentContainer,
+                            true,
+                            routes.countryItem
+                        )
+                    }
+                    is Routes.GoBack -> {
+                        mainNavigator.goBack()
+                    }
                 }
-                is MainRoutes.Routes.gotToDetailsPage -> {
-                    mainNavigator.openDetailsPage(R.id.fragmentContainer, true, routes.countryItem)
-                }
-                is MainRoutes.Routes.goBack -> {
-                    mainNavigator.goBack()
-                }
-            }
 
-        })
+            }
+        }
     }
 
     override fun getLifeCycleObserver(): LifecycleObserver {

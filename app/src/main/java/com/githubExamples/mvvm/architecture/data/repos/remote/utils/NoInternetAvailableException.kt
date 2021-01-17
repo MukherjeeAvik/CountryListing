@@ -1,8 +1,10 @@
 package com.githubExamples.mvvm.architecture.data.repos.remote.utils
 
-class NoInternetAvailableException : Exception() {
+import java.io.IOException
+
+class NoInternetAvailableException : IOException() {
     
-    override val message: String?
+    override val message: String
         get() = "No internet available"
 
 }

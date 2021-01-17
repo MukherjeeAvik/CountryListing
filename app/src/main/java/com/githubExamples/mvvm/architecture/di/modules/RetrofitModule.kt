@@ -1,7 +1,7 @@
 package com.githubExamples.mvvm.architecture.di.modules
 
 import android.app.Application
-import com.githubExamples.mvvm.architecture.BuildConfig
+import com.githubExamples.mvvm.acrhitecture.BuildConfig
 import com.githubExamples.mvvm.architecture.di.qualifiers.BaseUrl
 import com.githubExamples.mvvm.architecture.data.repos.remote.ApiService
 import com.githubExamples.mvvm.architecture.utils.*
@@ -49,7 +49,6 @@ class RetrofitModule {
 
         return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient.build()).build()
     }

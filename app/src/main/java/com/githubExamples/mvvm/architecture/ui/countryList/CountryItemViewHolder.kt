@@ -3,7 +3,7 @@ package com.githubExamples.mvvm.architecture.ui.countryList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.githubExamples.mvvm.architecture.R
+import com.githubExamples.mvvm.acrhitecture.R
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import com.githubExamples.mvvm.architecture.ui.base.BaseViewHolder
 import com.githubExamples.mvvm.architecture.utils.INCONSISTENT_VALUE

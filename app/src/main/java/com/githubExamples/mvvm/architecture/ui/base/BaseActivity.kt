@@ -83,6 +83,7 @@ abstract class BaseActivity : DaggerAppCompatActivity(), BaseFragment.Callback {
     override fun removeErrorsIfAny() {
         hideError()
     }
+
 }
 
 

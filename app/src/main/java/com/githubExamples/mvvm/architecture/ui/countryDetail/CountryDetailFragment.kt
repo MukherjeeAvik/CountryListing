@@ -3,8 +3,9 @@ package com.githubExamples.mvvm.architecture.ui.countryDetail
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.githubExamples.mvvm.architecture.R
+import com.githubExamples.mvvm.acrhitecture.R
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
+import com.githubExamples.mvvm.architecture.navigation.Routes
 import com.githubExamples.mvvm.architecture.ui.MainViewModel
 import com.githubExamples.mvvm.architecture.ui.base.BaseFragment
 import com.githubExamples.mvvm.architecture.utils.INCONSISTENT_VALUE
@@ -38,7 +39,7 @@ class CountryDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         backArrow.setOnClickListener {
-            sharedViewModel.goBack()
+            sharedViewModel.registerNavigationRoutes(Routes.GoBack)
         }
         val countryDetailsInfo = arguments?.getParcelable<CountryItem>(COUNTRY_DETAILS)
 

@@ -2,13 +2,14 @@ package com.githubExamples.mvvm.architecture.ui.countryList
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.githubExamples.mvvm.architecture.R
+import androidx.lifecycle.lifecycleScope
+import com.githubExamples.mvvm.acrhitecture.R
 import com.githubExamples.mvvm.architecture.di.qualifiers.FilterZone
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
+import com.githubExamples.mvvm.architecture.navigation.Routes
+import com.githubExamples.mvvm.architecture.ui.CountryListStates
 import com.githubExamples.mvvm.architecture.ui.MainViewModel
-import com.githubExamples.mvvm.architecture.ui.ViewStates
 import com.githubExamples.mvvm.architecture.ui.base.BaseFragment
 import com.githubExamples.mvvm.architecture.ui.base.BaseViewHolder
 import com.githubExamples.mvvm.architecture.utils.hide
@@ -16,6 +17,7 @@ import com.githubExamples.mvvm.architecture.utils.show
 import com.githubExamples.mvvm.architecture.utils.showAsPer
 import kotlinx.android.synthetic.main.country_listing_fragment.*
 import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class CountryListFragment : BaseFragment() {
@@ -53,7 +55,7 @@ class CountryListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewSates()
-        sharedViewModel.getCurrentViewState()
+        sharedViewModel.getListOfCountries()
         setUpView()
 
     }
@@ -81,33 +83,38 @@ class CountryListFragment : BaseFragment() {
     }
 
     private fun observeViewSates() {
-        sharedViewModel.observeViewStates().observe(viewLifecycleOwner, Observer { viewStates ->
-            when (viewStates) {
-                is ViewStates.CountryListStates.ShowLoading -> {
-                    progressBar.show()
-                    pullToRefresh.hide()
-                    noDataAvailable.hide()
-                }
-                is ViewStates.CountryListStates.ShowContent -> {
-                    progressBar.showAsPer(viewStates.isLoading)
-                    pullToRefresh.showAsPer(viewStates.showList)
-                    if (viewStates.hasError) {
-                        notifyUserThroughMessage(viewStates.errorMessage)
-                    } else {
-                        removeErrors()
-                    }
-                    if (viewStates.showList && viewStates.countryList.isNotEmpty()) {
-                        pullToRefresh.show()
-                        noDataAvailable.hide()
-                        setUpAdapter(viewStates.countryList)
-                    } else {
-                        pullToRefresh.hide()
-                        noDataAvailable.show()
-                    }
 
+        lifecycleScope.launchWhenCreated {
+            sharedViewModel.observeViewStates().collect { viewStates ->
+                when (viewStates) {
+                    is CountryListStates.ShowLoading -> {
+                        progressBar.show()
+                        pullToRefresh.hide()
+                        noDataAvailable.hide()
+                    }
+                    is CountryListStates.ShowContent -> {
+                        progressBar.showAsPer(viewStates.isLoading)
+                        pullToRefresh.showAsPer(viewStates.showList)
+                        if (viewStates.hasError) {
+                            notifyUserThroughMessage(viewStates.errorMessage)
+                        } else {
+                            removeErrors()
+                        }
+                        if (viewStates.showList && viewStates.countryList.isNotEmpty()) {
+                            pullToRefresh.show()
+                            noDataAvailable.hide()
+                            setUpAdapter(viewStates.countryList)
+                        } else {
+                            pullToRefresh.hide()
+                            noDataAvailable.show()
+                        }
+
+                    }
                 }
+
             }
-        })
+        }
+
 
     }
 
@@ -115,7 +122,7 @@ class CountryListFragment : BaseFragment() {
         countryListAdapter.registerForCallbacks(object :
             BaseViewHolder.ItemClickedCallback<CountryItem> {
             override fun onItemClicked(t: CountryItem) {
-                sharedViewModel.navigateToDetailsPage(t)
+                sharedViewModel.registerNavigationRoutes(Routes.GotoDetailsPage(t))
             }
 
         })
