@@ -1,17 +1,20 @@
 package com.githubExamples.mvvm.architecture.ui.base
 
 import androidx.recyclerview.widget.RecyclerView
+import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import java.util.*
 
 abstract class BaseAdapter<V : Any, T : RecyclerView.ViewHolder> : RecyclerView.Adapter<T>() {
+
+    protected var _callback: ((item: V) -> Unit)? = null
+    fun registerCallback(callback: (item: V) -> Unit) {
+        _callback = callback
+    }
 
     val list: MutableList<V> = Collections.synchronizedList(ArrayList())
 
     val listSize: Int
         get() = list.size
-
-    var clickListener: BaseViewHolder.ItemClickedCallback<V>?=null
-
 
     /**
      * clear all the list and add the whole list
@@ -45,7 +48,6 @@ abstract class BaseAdapter<V : Any, T : RecyclerView.ViewHolder> : RecyclerView.
     fun notifyChange() {
         super.notifyDataSetChanged()
     }
-
 
 
 }

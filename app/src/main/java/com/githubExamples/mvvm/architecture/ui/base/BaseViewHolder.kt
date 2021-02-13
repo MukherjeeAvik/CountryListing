@@ -1,17 +1,14 @@
 package com.githubExamples.mvvm.architecture.ui.base
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 
-abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+abstract class BaseViewHolder<T>(itemView: ViewBinding) : RecyclerView.ViewHolder(itemView.root) {
 
     var itemClickCallback: ItemClickedCallback<T>? = null
 
 
-    abstract fun loadData(receivedData: T)
-    open fun loadData(data: T, position: Int) {
-
-    }
+    abstract fun loadData(receivedData: T, callback: ((item: T) -> Unit)?)
 
 
     interface ItemClickedCallback<T> {

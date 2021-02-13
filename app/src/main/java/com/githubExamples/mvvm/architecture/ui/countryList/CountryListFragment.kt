@@ -1,26 +1,28 @@
 package com.githubExamples.mvvm.architecture.ui.countryList
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.githubExamples.mvvm.acrhitecture.R
+import com.githubExamples.mvvm.acrhitecture.databinding.CountryListingFragmentBinding
 import com.githubExamples.mvvm.architecture.di.qualifiers.FilterZone
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import com.githubExamples.mvvm.architecture.navigation.Routes
 import com.githubExamples.mvvm.architecture.ui.CountryListStates
 import com.githubExamples.mvvm.architecture.ui.MainViewModel
 import com.githubExamples.mvvm.architecture.ui.base.BaseFragment
-import com.githubExamples.mvvm.architecture.ui.base.BaseViewHolder
+import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
 import com.githubExamples.mvvm.architecture.utils.hide
 import com.githubExamples.mvvm.architecture.utils.show
 import com.githubExamples.mvvm.architecture.utils.showAsPer
-import kotlinx.android.synthetic.main.country_listing_fragment.*
-import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
+import dagger.Lazy
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class CountryListFragment : BaseFragment() {
+class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
 
     lateinit var sharedViewModel: MainViewModel
 
@@ -28,13 +30,11 @@ class CountryListFragment : BaseFragment() {
     lateinit var providerFactory: ViewModelProviderFactory
 
     @Inject
-    lateinit var countryListAdapter: CountryListAdapter
+    lateinit var countryListAdapter: Lazy<CountryListAdapter>
 
     @Inject
     @FilterZone
     lateinit var region: String
-
-    override fun getLayoutId() = R.layout.country_listing_fragment
 
     override fun getFragmentTag() = TAG
 
@@ -43,13 +43,13 @@ class CountryListFragment : BaseFragment() {
     override fun reloadPage() {
         sharedViewModel.disposeOngoingOperationIfAny()
         sharedViewModel.getListOfCountries()
-        pullToRefresh.isRefreshing = false
+        binding.pullToRefresh.isRefreshing = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedViewModel =
-            ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
+                ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,13 +61,13 @@ class CountryListFragment : BaseFragment() {
     }
 
     private fun setUpView() {
-        pullToRefresh.setOnRefreshListener {
+        binding.pullToRefresh.setOnRefreshListener {
             reloadPage()
         }
-        retryButton.setOnClickListener {
+        binding.retryButton.setOnClickListener {
             reloadPage()
         }
-        regionHeader.text = requireContext().getString(R.string.regionText, region)
+        binding.regionHeader.text = requireContext().getString(R.string.regionText, region)
     }
 
     companion object {
@@ -88,25 +88,35 @@ class CountryListFragment : BaseFragment() {
             sharedViewModel.observeViewStates().collect { viewStates ->
                 when (viewStates) {
                     is CountryListStates.ShowLoading -> {
-                        progressBar.show()
-                        pullToRefresh.hide()
-                        noDataAvailable.hide()
+                        binding.apply {
+                            progressBar.show()
+                            pullToRefresh.hide()
+                            noDataAvailable.hide()
+                        }
+
                     }
                     is CountryListStates.ShowContent -> {
-                        progressBar.showAsPer(viewStates.isLoading)
-                        pullToRefresh.showAsPer(viewStates.showList)
+                        binding.apply {
+                            progressBar.showAsPer(viewStates.isLoading)
+                            pullToRefresh.showAsPer(viewStates.showList)
+                        }
                         if (viewStates.hasError) {
                             notifyUserThroughMessage(viewStates.errorMessage)
                         } else {
                             removeErrors()
                         }
                         if (viewStates.showList && viewStates.countryList.isNotEmpty()) {
-                            pullToRefresh.show()
-                            noDataAvailable.hide()
+                            binding.apply {
+                                pullToRefresh.show()
+                                noDataAvailable.hide()
+                            }
                             setUpAdapter(viewStates.countryList)
                         } else {
-                            pullToRefresh.hide()
-                            noDataAvailable.show()
+                            binding.apply {
+                                pullToRefresh.hide()
+                                noDataAvailable.show()
+                            }
+
                         }
 
                     }
@@ -119,17 +129,17 @@ class CountryListFragment : BaseFragment() {
     }
 
     private fun setUpAdapter(listOfCountries: List<CountryItem>) {
-        countryListAdapter.registerForCallbacks(object :
-            BaseViewHolder.ItemClickedCallback<CountryItem> {
-            override fun onItemClicked(t: CountryItem) {
-                sharedViewModel.registerNavigationRoutes(Routes.GotoDetailsPage(t))
-            }
 
-        })
-        countryListAdapter.addAll(listOfCountries)
-        countryListRv.adapter = countryListAdapter
+        countryListAdapter.get().registerCallback {
+            sharedViewModel.registerNavigationRoutes(Routes.GotoDetailsPage(it))
+        }
+        countryListAdapter.get().addAll(listOfCountries)
+        binding.countryListRv.adapter = countryListAdapter.get()
 
     }
+
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CountryListingFragmentBinding
+        get() = CountryListingFragmentBinding::inflate
 
 
 }

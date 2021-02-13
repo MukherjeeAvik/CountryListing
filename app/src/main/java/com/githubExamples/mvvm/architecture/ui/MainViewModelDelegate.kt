@@ -8,6 +8,6 @@ interface MainViewModelDelegate {
     fun getListOfCountries()
     fun observeViewStates(): StateFlow<CountryListStates>
     fun observeNavigationStates(): StateFlow<Routes>
-    fun registerNavigationRoutes(route:Routes)
+    fun registerNavigationRoutes(route: Routes)
     fun disposeOngoingOperationIfAny()
 }

@@ -1,19 +1,20 @@
 package com.githubExamples.mvvm.architecture.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.githubExamples.mvvm.acrhitecture.R
+import com.githubExamples.mvvm.acrhitecture.databinding.ActivityMainBinding
 import com.githubExamples.mvvm.architecture.navigation.MainNavigator
 import com.githubExamples.mvvm.architecture.navigation.Routes
 import com.githubExamples.mvvm.architecture.ui.base.BaseActivity
 import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
@@ -43,9 +44,9 @@ class MainActivity : BaseActivity() {
                     }
                     is Routes.GotoDetailsPage -> {
                         mainNavigator.openDetailsPage(
-                            R.id.fragmentContainer,
-                            true,
-                            routes.countryItem
+                                R.id.fragmentContainer,
+                                true,
+                                routes.countryItem
                         )
                     }
                     is Routes.GoBack -> {
@@ -61,6 +62,8 @@ class MainActivity : BaseActivity() {
         return mainViewModel
     }
 
-    override fun getParentLayForSnackBar() = rootLay
+    override val bindingInflater: (LayoutInflater) -> ActivityMainBinding
+        get() = ActivityMainBinding::inflate
+
 
 }

@@ -1,26 +1,27 @@
 package com.githubExamples.mvvm.architecture.ui.countryDetail
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.githubExamples.mvvm.acrhitecture.R
+import com.githubExamples.mvvm.acrhitecture.databinding.CountryDetailsFragmentBinding
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import com.githubExamples.mvvm.architecture.navigation.Routes
 import com.githubExamples.mvvm.architecture.ui.MainViewModel
 import com.githubExamples.mvvm.architecture.ui.base.BaseFragment
+import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
 import com.githubExamples.mvvm.architecture.utils.INCONSISTENT_VALUE
 import com.githubExamples.mvvm.architecture.utils.NOT_AVAIALBLE
 import kotlinx.android.synthetic.main.country_details_fragment.*
-import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
 import javax.inject.Inject
 
-class CountryDetailFragment : BaseFragment() {
+class CountryDetailFragment() : BaseFragment<CountryDetailsFragmentBinding>() {
     lateinit var sharedViewModel: MainViewModel
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
 
-    override fun getLayoutId() = R.layout.country_details_fragment
 
     override fun getFragmentTag() = TAG
 
@@ -33,8 +34,11 @@ class CountryDetailFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedViewModel =
-            ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
+                ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
     }
+
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CountryDetailsFragmentBinding
+        get() = CountryDetailsFragmentBinding::inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 

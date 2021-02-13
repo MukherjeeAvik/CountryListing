@@ -9,11 +9,10 @@ import dagger.android.DaggerApplication
 class MyApplication : DaggerApplication() {
 
 
-
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         return DaggerAppComponent
-            .builder()
-            .application(this).build()
+                .builder()
+                .application(this).build()
     }
 
     override fun onCreate() {
@@ -23,7 +22,7 @@ class MyApplication : DaggerApplication() {
 
     fun isInternetAvailable(): Boolean {
         val connectivityManager =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         val res = activeNetworkInfo != null && activeNetworkInfo.isConnected
         return res

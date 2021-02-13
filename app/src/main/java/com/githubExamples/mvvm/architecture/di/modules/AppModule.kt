@@ -7,11 +7,8 @@ import com.githubExamples.mvvm.architecture.data.repos.local.FileRepository
 import com.githubExamples.mvvm.architecture.data.repos.remote.GetCountryListingApiImpl
 import com.githubExamples.mvvm.architecture.di.qualifiers.CacheDirectoryPathInfo
 import com.githubExamples.mvvm.architecture.di.qualifiers.FilterZone
-import com.githubExamples.mvvm.architecture.domain.GetCountryListingFromApi
 import com.githubExamples.mvvm.architecture.domain.usecase.GetCountryListUseCase
 import com.githubExamples.mvvm.architecture.utils.*
-import com.githubExamples.mvvm.architecture.utils.rx.AppSchedulerProvider
-import com.githubExamples.mvvm.architecture.utils.rx.SchedulerProvider
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -46,9 +43,6 @@ class AppModule {
 
     }
 
-    @Singleton
-    @Provides
-    fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
 
     @Provides
     @Singleton
@@ -63,14 +57,14 @@ class AppModule {
 
 
     @Provides
-    fun provideLocalRepository(@CacheDirectoryPathInfo cacheDirectoryFile: File):FileRepository {
-        return FileRepository("COUNTRY_LISTING_LOCAL",cacheDirectoryFile)
+    fun provideLocalRepository(@CacheDirectoryPathInfo cacheDirectoryFile: File): FileRepository {
+        return FileRepository("COUNTRY_LISTING_LOCAL", cacheDirectoryFile)
     }
 
 
     @Provides
-    fun provideCountryListingUseCase(countryListApi: GetCountryListingApiImpl,fileRepository: FileRepository, gson: Gson,@FilterZone filter: String):GetCountryListUseCase {
-        return GetCountryListUseCase(countryListApi,fileRepository,gson,filter)
+    fun provideCountryListingUseCase(countryListApi: GetCountryListingApiImpl, fileRepository: FileRepository, gson: Gson, @FilterZone filter: String): GetCountryListUseCase {
+        return GetCountryListUseCase(countryListApi, fileRepository, gson, filter)
     }
 
 

@@ -12,12 +12,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    private val countryListUseCase: GetCountryListUseCase
+        private val countryListUseCase: GetCountryListUseCase
 ) : BaseViewModel(), LifecycleObserver, MainViewModelDelegate {
 
 
     private val countryListViewStates =
-        MutableStateFlow<CountryListStates>(CountryListStates.ShowLoading)
+            MutableStateFlow<CountryListStates>(CountryListStates.ShowLoading)
 
     private val mainNavigationStates = MutableStateFlow<Routes>(Routes.GotoListingPage)
 
@@ -30,22 +30,22 @@ class MainViewModel @Inject constructor(
 
                     val listOfCountries = useCaseData.data.list
                     val viewState = CountryListStates.ShowContent(
-                        isLoading = false,
-                        hasError = false,
-                        errorMessage = "",
-                        showList = true,
-                        countryList = listOfCountries
+                            isLoading = false,
+                            hasError = false,
+                            errorMessage = "",
+                            showList = true,
+                            countryList = listOfCountries
                     )
 
                     countryListViewStates.value = viewState
                 }
                 is UseCaseWrapper.Failed -> {
                     val viewState = CountryListStates.ShowContent(
-                        isLoading = false,
-                        hasError = true,
-                        errorMessage = useCaseData.reason.name,
-                        showList = false,
-                        countryList = ArrayList()
+                            isLoading = false,
+                            hasError = true,
+                            errorMessage = useCaseData.reason.name,
+                            showList = false,
+                            countryList = ArrayList()
                     )
 
                     countryListViewStates.value = viewState
@@ -56,7 +56,9 @@ class MainViewModel @Inject constructor(
 
     override fun observeViewStates(): StateFlow<CountryListStates> = countryListViewStates
     override fun observeNavigationStates(): StateFlow<Routes> = mainNavigationStates
-    override fun registerNavigationRoutes(route: Routes) { mainNavigationStates.value = route }
+    override fun registerNavigationRoutes(route: Routes) {
+        mainNavigationStates.value = route
+    }
 
     override fun disposeOngoingOperationIfAny() {
 

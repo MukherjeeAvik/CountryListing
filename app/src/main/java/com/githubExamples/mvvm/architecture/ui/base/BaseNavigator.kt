@@ -12,29 +12,29 @@ abstract class BaseNavigator(val fragmentManager: FragmentManager) {
     val mFragmentManager: WeakReference<FragmentManager> = WeakReference(fragmentManager)
 
     protected fun showFragmentWithAnimation(
-        fragment: Fragment,
-        fragmentTag: String,
-        addToBackStack: Boolean,
-        mainContaner: Int
+            fragment: Fragment,
+            fragmentTag: String,
+            addToBackStack: Boolean,
+            mainContaner: Int
     ) {
         showFragmentWithTag(fragment, fragmentTag, addToBackStack, true, mainContaner)
     }
 
     private fun showFragmentWithTag(
-        fragment: Fragment,
-        fragmentTag: String,
-        addToBackStack: Boolean,
-        withAnimation: Boolean,
-        mainContaner: Int
+            fragment: Fragment,
+            fragmentTag: String,
+            addToBackStack: Boolean,
+            withAnimation: Boolean,
+            mainContaner: Int
     ) {
         if (mFragmentManager.get() != null) {
             if (!isFragmentOnTop(fragmentTag, mainContaner)) {
                 val fragmentTransaction = mFragmentManager.get()!!
-                    .beginTransaction()
+                        .beginTransaction()
                 if (withAnimation) {
                     fragmentTransaction.setCustomAnimations(
-                        R.anim.slide_in_right, R.anim.slide_out_left,
-                        R.anim.slide_in_left, R.anim.slide_out_right
+                            R.anim.slide_in_right, R.anim.slide_out_left,
+                            R.anim.slide_in_left, R.anim.slide_out_right
                     )
                 }
 
@@ -57,8 +57,8 @@ abstract class BaseNavigator(val fragmentManager: FragmentManager) {
     }
 
     private fun isFragmentOnTop(
-        fragmentTag: String,
-        mainContaner: Int
+            fragmentTag: String,
+            mainContaner: Int
     ): Boolean {
         val fragmentManager = mFragmentManager.get()
         var fragmentOnTop = false

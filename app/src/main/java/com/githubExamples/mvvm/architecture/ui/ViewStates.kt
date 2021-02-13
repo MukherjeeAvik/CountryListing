@@ -2,15 +2,15 @@ package com.githubExamples.mvvm.architecture.ui
 
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 
-    sealed class CountryListStates {
-        data class ShowContent(
+sealed class CountryListStates {
+    data class ShowContent(
             val isLoading: Boolean,
             val hasError: Boolean,
             val errorMessage: String,
             val showList: Boolean,
             val countryList: List<CountryItem>
-        ) : CountryListStates()
+    ) : CountryListStates()
 
-        object ShowLoading : CountryListStates()
-    }
+    object ShowLoading : CountryListStates()
+}
 

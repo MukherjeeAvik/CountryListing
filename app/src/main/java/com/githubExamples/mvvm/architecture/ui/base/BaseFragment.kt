@@ -10,21 +10,22 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
+import androidx.viewbinding.ViewBinding
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
-
-    /**
-     * @return layout resource id
-     */
-    @LayoutRes
-    abstract fun getLayoutId(): Int
 
     @Inject
     lateinit var app: Application
 
+    private var _binding: ViewBinding? = null
+    abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
+
+    @Suppress("UNCHECKED_CAST")
+    protected val binding: VB
+        get() = _binding as VB
 
 
     override fun onAttach(context: Context) {
@@ -37,28 +38,28 @@ abstract class BaseFragment : Fragment() {
         super.onDetach()
     }
 
-    fun notifyUserThroughMessage(message: String){
-        if(activity is BaseActivity) {
-            (activity as BaseActivity).onNotifyError(message)
+    fun notifyUserThroughMessage(message: String) {
+        if (activity is BaseActivity<*>) {
+            (activity as BaseActivity<*>).onNotifyError(message)
         }
     }
 
-    fun removeErrors(){
-        if(activity is BaseActivity) {
-            (activity as BaseActivity).removeErrorsIfAny()
+    fun removeErrors() {
+        if (activity is BaseActivity<*>) {
+            (activity as BaseActivity<*>).removeErrorsIfAny()
         }
     }
 
     abstract fun getFragmentTag(): String
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(getLayoutId(), container, false)
-
+        _binding = bindingInflater.invoke(inflater, container, false)
+        return requireNotNull(_binding).root
 
     }
 
@@ -76,14 +77,12 @@ abstract class BaseFragment : Fragment() {
     }
 
 
-
     protected fun showMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
 
     }
 
     abstract fun reloadPage()
-
 
 
     interface Callback {

@@ -3,6 +3,7 @@ package com.githubExamples.mvvm.architecture.ui.base
 import android.app.Application
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.LayoutRes
@@ -10,6 +11,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.lifecycle.LifecycleObserver
+import androidx.viewbinding.ViewBinding
 import com.githubExamples.mvvm.acrhitecture.R
 import com.githubExamples.mvvm.architecture.utils.OFFLINE
 import com.google.android.material.snackbar.Snackbar
@@ -17,7 +19,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
 
-abstract class BaseActivity : DaggerAppCompatActivity(), BaseFragment.Callback {
+abstract class BaseActivity<VB : ViewBinding> : DaggerAppCompatActivity(), BaseFragment.Callback {
 
 
     @LayoutRes
@@ -28,10 +30,17 @@ abstract class BaseActivity : DaggerAppCompatActivity(), BaseFragment.Callback {
     @Inject
     lateinit var app: Application
 
+    private var _binding: ViewBinding? = null
+    abstract val bindingInflater: (LayoutInflater) -> VB
+
+    @Suppress("UNCHECKED_CAST")
+    protected val binding: VB
+        get() = _binding as VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
+        _binding = bindingInflater.invoke(layoutInflater)
+        setContentView(requireNotNull(_binding).root)
     }
 
     override fun onResume() {
@@ -56,15 +65,15 @@ abstract class BaseActivity : DaggerAppCompatActivity(), BaseFragment.Callback {
 
         snackbar = Snackbar.make(rootView, snackbarText, Snackbar.LENGTH_INDEFINITE).apply {
             view.layoutParams = (view.layoutParams as CoordinatorLayout.LayoutParams)
-                .apply {
-                    setMargins(leftMargin, topMargin, rightMargin, bottomMargin)
-                }
+                    .apply {
+                        setMargins(leftMargin, topMargin, rightMargin, bottomMargin)
+                    }
 
         }
         val snackBarView = snackbar?.view
         snackBarView?.setBackgroundColor(ContextCompat.getColor(this, R.color.errorColor))
         val snackBarTextView =
-            snackbar?.view?.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+                snackbar?.view?.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
         snackBarTextView?.maxLines = 2
         snackbar?.show()
     }
@@ -73,10 +82,10 @@ abstract class BaseActivity : DaggerAppCompatActivity(), BaseFragment.Callback {
         snackbar?.dismiss()
     }
 
-    abstract fun getParentLayForSnackBar(): View?
+
     override fun onNotifyError(errorMessage: String) {
-        getParentLayForSnackBar()?.let {
-            showError(it,message = errorMessage )
+        requireNotNull(binding.root).run {
+            showError(this, message = errorMessage)
         }
     }
 
