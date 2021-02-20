@@ -1,6 +1,5 @@
 package com.githubExamples.mvvm.architecture.domain.usecase
 
-import com.githubExamples.mvvm.architecture.di.qualifiers.FilterZone
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import com.githubExamples.mvvm.architecture.data.mappers.CountryItemMapper
 import com.githubExamples.mvvm.architecture.data.repos.local.FileRepository
@@ -20,9 +19,8 @@ class GetCountryListUseCase @Inject constructor(
     private val countryApiRepo: GetCountryListFromApi,
     private val fileRepository: FileRepository,
     private val schedulerProvider: SchedulerProvider,
-    private val gson: Gson,
-    @FilterZone private val filter: String
-) : UseCase<UseCaseWrapper<DataWrapper>>() {
+    private val gson: Gson
+    ) : UseCase<UseCaseWrapper<DataWrapper>>() {
 
     init {
         fileRepository.fileName = COUNTRY_LIST_FILE_NAME
@@ -85,7 +83,6 @@ class GetCountryListUseCase @Inject constructor(
     private fun transformCountryObjects(): ObservableTransformer<List<CountryListResponseItem>, List<CountryItem>> {
         return ObservableTransformer { allCountries ->
             allCountries.flatMapIterable { return@flatMapIterable it }
-                .filter { return@filter it.region == filter }
                 .map { eachCountryResponseItem ->
                     return@map CountryItemMapper()
                         .mapFrom(eachCountryResponseItem)

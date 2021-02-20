@@ -24,10 +24,6 @@ class MainViewModel @Inject constructor(
     private val navigationRoutes: SingleLiveEvent<MainRoutes.Routes>
             by lazy { SingleLiveEvent<MainRoutes.Routes>() }
 
-    private var lastObservedState: ViewStates.CountryListStates? = null
-    private var lastOpenedDetailsOfCountry: CountryItem? = null
-
-
     override fun getListOfCountries() {
         compositeDisposable.add(
             countryListUseCase.subscribeForData()
@@ -39,10 +35,7 @@ class MainViewModel @Inject constructor(
                             var hasError_ = false
                             var errorMesage_ = ""
 
-                            if (countryListDataWrapper.data.source == Source.NETWORK) {
-                                hasError_ = false
-                                errorMesage_ = ""
-                            } else if (countryListDataWrapper.data.source == Source.LOCAL) {
+                            if (countryListDataWrapper.data.source == Source.LOCAL) {
                                 hasError_ = true
                                 errorMesage_ = NO_NETWORK
                             }
@@ -54,7 +47,6 @@ class MainViewModel @Inject constructor(
                                 showList = true,
                                 countryList = countryListDataWrapper.data.list
                             )
-                            cacheLastState(currentState)
                             countryListViewStates.postValue(currentState)
 
                         }
@@ -67,7 +59,6 @@ class MainViewModel @Inject constructor(
                                 showList = false,
                                 countryList = ArrayList()
                             )
-                            cacheLastState(currentState)
                             countryListViewStates.postValue(currentState)
 
                         }
@@ -83,7 +74,6 @@ class MainViewModel @Inject constructor(
                         showList = false,
                         countryList = ArrayList()
                     )
-                    cacheLastState(currentState)
                     countryListViewStates.postValue(currentState)
 
                 })
@@ -98,22 +88,12 @@ class MainViewModel @Inject constructor(
         compositeDisposable.clear()
     }
 
-    override fun navigateToLandingPage(mainNavigator: MainNavigator) {
+    override fun navigateToLandingPage() {
+        navigationRoutes.postValue(MainRoutes.Routes.gotoListingPage)
 
-
-        if (mainNavigator.isDetailsPageShowing())
-            navigationRoutes.postValue(lastOpenedDetailsOfCountry?.let {
-                MainRoutes.Routes.gotToDetailsPage(
-                    it
-                )
-            })
-        else {
-            navigationRoutes.postValue(MainRoutes.Routes.gotoListingPage)
-        }
     }
 
     override fun navigateToDetailsPage(countryItem: CountryItem) {
-        lastOpenedDetailsOfCountry = countryItem
         navigationRoutes.postValue(MainRoutes.Routes.gotToDetailsPage(countryItem))
     }
 
@@ -122,18 +102,5 @@ class MainViewModel @Inject constructor(
     }
 
     override fun observeRoutes(): SingleLiveEvent<MainRoutes.Routes> = navigationRoutes
-
-    override fun getCurrentViewState() {
-
-        if (lastObservedState == null)
-            getListOfCountries()
-        else
-            countryListViewStates.postValue(lastObservedState)
-    }
-
-    private fun cacheLastState(state: ViewStates.CountryListStates) {
-        lastObservedState = state
-    }
-
 
 }

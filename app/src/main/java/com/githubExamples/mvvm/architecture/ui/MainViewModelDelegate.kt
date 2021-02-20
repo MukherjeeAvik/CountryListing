@@ -10,10 +10,9 @@ interface MainViewModelDelegate {
     fun getListOfCountries()
     fun observeViewStates(): SingleLiveEvent<ViewStates.CountryListStates>
     fun disposeOngoingOperationIfAny()
-    fun navigateToLandingPage(mainNavigator: MainNavigator)
+    fun navigateToLandingPage()
     fun navigateToDetailsPage(countryItem: CountryItem)
     fun observeRoutes(): SingleLiveEvent<MainRoutes.Routes>
-    fun getCurrentViewState()
     fun goBack()
 
 }

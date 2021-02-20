@@ -1,7 +1,7 @@
 package com.githubExamples.mvvm.architecture.di.modules
 
 import android.app.Application
-import com.githubExamples.mvvm.architecture.BuildConfig
+import com.githubExamples.mvvm.acrhitecture.BuildConfig
 import com.githubExamples.mvvm.architecture.di.qualifiers.BaseUrl
 import com.githubExamples.mvvm.architecture.data.repos.remote.ApiService
 import com.githubExamples.mvvm.architecture.utils.*
@@ -64,7 +64,7 @@ class RetrofitModule {
     fun provideHttpLogger(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         return httpLoggingInterceptor.apply {
-            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         }
     }
 
@@ -83,18 +83,5 @@ class RetrofitModule {
     @Provides
     @Singleton
     @BaseUrl
-    fun getBaseUrlForRetrofit(): String {
-        return when (BuildConfig.FLAVOR) {
-            BUILD_VARIANT_DEV -> {
-                DEV_VARIANT_BASE_URL
-            }
-            BUILD_VARIANT_QA -> {
-                QA_VARIANT_BASE_URL
-            }
-            else -> {
-                PROD_VARIANT_BASE_URL
-            }
-        }
-
-    }
+    fun getBaseUrlForRetrofit() = BASE_URL
 }

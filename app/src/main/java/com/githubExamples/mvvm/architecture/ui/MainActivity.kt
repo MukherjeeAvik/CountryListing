@@ -29,7 +29,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(this, providerFactory).get(MainViewModel::class.java)
         observeRoutes()
-        mainViewModel.navigateToLandingPage(mainNavigator)
+        mainViewModel.navigateToLandingPage()
 
     }
 

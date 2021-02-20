@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.githubExamples.mvvm.architecture.R
-import com.githubExamples.mvvm.architecture.di.qualifiers.FilterZone
+import com.githubExamples.mvvm.acrhitecture.R
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import com.githubExamples.mvvm.architecture.ui.MainViewModel
 import com.githubExamples.mvvm.architecture.ui.ViewStates
@@ -28,10 +27,6 @@ class CountryListFragment : BaseFragment() {
     @Inject
     lateinit var countryListAdapter: CountryListAdapter
 
-    @Inject
-    @FilterZone
-    lateinit var region: String
-
     override fun getLayoutId() = R.layout.country_listing_fragment
 
     override fun getFragmentTag() = TAG
@@ -53,8 +48,8 @@ class CountryListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewSates()
-        sharedViewModel.getCurrentViewState()
         setUpView()
+        sharedViewModel.getListOfCountries()
 
     }
 
@@ -65,7 +60,7 @@ class CountryListFragment : BaseFragment() {
         retryButton.setOnClickListener {
             reloadPage()
         }
-        regionHeader.text = requireContext().getString(R.string.regionText, region)
+        regionHeader.text = requireContext().getString(R.string.regionText, "All Over")
     }
 
     companion object {

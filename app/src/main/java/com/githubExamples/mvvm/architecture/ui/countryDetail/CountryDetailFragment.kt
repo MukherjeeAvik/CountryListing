@@ -3,7 +3,7 @@ package com.githubExamples.mvvm.architecture.ui.countryDetail
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.githubExamples.mvvm.architecture.R
+import com.githubExamples.mvvm.acrhitecture.R
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import com.githubExamples.mvvm.architecture.ui.MainViewModel
 import com.githubExamples.mvvm.architecture.ui.base.BaseFragment
