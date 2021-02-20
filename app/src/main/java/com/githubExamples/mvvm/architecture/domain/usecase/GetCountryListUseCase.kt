@@ -16,8 +16,7 @@ import kotlinx.coroutines.withContext
 class GetCountryListUseCase(
     private val countryApiRepo: GetCountryListingFromApi,
     private val fileRepository: GetCountryListingFromLocal,
-    private val gson: Gson,
-    @FilterZone private val filter: String
+    private val gson: Gson
 ) : UseCase<UseCaseWrapper<DataWrapper>>() {
 
     override suspend fun requestForData(): UseCaseWrapper<DataWrapper> {
@@ -29,7 +28,7 @@ class GetCountryListUseCase(
                 if (!apiResponseRaw.isNullOrEmpty()) {
                     syncDataToLocal(apiResponseRaw)
                 }
-                val mappedApiResponse = mapRawDataToModelClass(apiResponseRaw, filter)
+                val mappedApiResponse = mapRawDataToModelClass(apiResponseRaw)
                 val dataWrapper = DataWrapper(mappedApiResponse, Source.NETWORK)
                 UseCaseWrapper.Success(dataWrapper)
             } catch (ex: Exception) {
@@ -41,7 +40,7 @@ class GetCountryListUseCase(
                     val cachedRawModelResponse =
                         gson.fromJson(cachedResponseRaw, CountryListResponse::class.java)
                     val cachedMappedResponse =
-                        mapRawDataToModelClass(cachedRawModelResponse, filter)
+                        mapRawDataToModelClass(cachedRawModelResponse)
                     val dataWrapper = DataWrapper(cachedMappedResponse, Source.LOCAL)
                     UseCaseWrapper.Success(dataWrapper)
                 }
@@ -50,15 +49,12 @@ class GetCountryListUseCase(
     }
 
     private  fun mapRawDataToModelClass(
-        response: CountryListResponse,
-        filterCode: String
+        response: CountryListResponse
     ): List<CountryItem> {
 
         val mappedListOfCountries = ArrayList<CountryItem>()
 
-        response.filter { eachCountryItemRaw ->
-            eachCountryItemRaw.region == filterCode
-        }.map { eachCountryItemRaw ->
+       response.map { eachCountryItemRaw ->
             CountryItemMapper().mapFrom(eachCountryItemRaw)
         }.apply {
             mappedListOfCountries.addAll(this)

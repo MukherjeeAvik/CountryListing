@@ -25,27 +25,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    @FilterZone
-    fun getFilterAsPerEnvironment(): String {
-
-        return when (BuildConfig.FLAVOR) {
-            BUILD_VARIANT_DEV -> {
-                DEV_VARIANT_QUERY
-            }
-            BUILD_VARIANT_QA -> {
-                QA_VARIANT_QUERY
-            }
-            else -> {
-                PROD_VARIANT_QUERY
-            }
-        }
-
-
-    }
-
-
-    @Provides
-    @Singleton
     @CacheDirectoryPathInfo
     fun provideCacheDirectory(context: Context): File {
         return context.cacheDir
@@ -63,8 +42,8 @@ class AppModule {
 
 
     @Provides
-    fun provideCountryListingUseCase(countryListApi: GetCountryListingApiImpl, fileRepository: FileRepository, gson: Gson, @FilterZone filter: String): GetCountryListUseCase {
-        return GetCountryListUseCase(countryListApi, fileRepository, gson, filter)
+    fun provideCountryListingUseCase(countryListApi: GetCountryListingApiImpl, fileRepository: FileRepository, gson: Gson): GetCountryListUseCase {
+        return GetCountryListUseCase(countryListApi, fileRepository, gson)
     }
 
 

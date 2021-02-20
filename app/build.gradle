@@ -7,7 +7,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.evaluation.digitas.coutryList"
+        applicationId "com.githubExamples.mvvm.acrhitecture"
         minSdkVersion "$rootProject.minSdkVersion"
         targetSdkVersion "$rootProject.targetSdkVersion"
         versionCode 1

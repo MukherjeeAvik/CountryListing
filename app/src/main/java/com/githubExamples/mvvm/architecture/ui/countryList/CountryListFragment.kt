@@ -32,10 +32,6 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
     @Inject
     lateinit var countryListAdapter: Lazy<CountryListAdapter>
 
-    @Inject
-    @FilterZone
-    lateinit var region: String
-
     override fun getFragmentTag() = TAG
 
     override fun getLifeCycleObserver() = sharedViewModel
@@ -67,7 +63,7 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
         binding.retryButton.setOnClickListener {
             reloadPage()
         }
-        binding.regionHeader.text = requireContext().getString(R.string.regionText, region)
+        binding.regionHeader.text = requireContext().getString(R.string.regionText, "All over")
     }
 
     companion object {

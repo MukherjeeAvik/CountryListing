@@ -82,18 +82,5 @@ class RetrofitModule {
     @Provides
     @Singleton
     @BaseUrl
-    fun getBaseUrlForRetrofit(): String {
-        return when (BuildConfig.FLAVOR) {
-            BUILD_VARIANT_DEV -> {
-                DEV_VARIANT_BASE_URL
-            }
-            BUILD_VARIANT_QA -> {
-                QA_VARIANT_BASE_URL
-            }
-            else -> {
-                PROD_VARIANT_BASE_URL
-            }
-        }
-
-    }
+    fun getBaseUrlForRetrofit() = BASE_URL
 }
