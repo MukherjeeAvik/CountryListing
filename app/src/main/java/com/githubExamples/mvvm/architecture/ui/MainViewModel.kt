@@ -19,7 +19,9 @@ class MainViewModel @Inject constructor(
     private val countryListViewStates =
             MutableStateFlow<CountryListStates>(CountryListStates.ShowLoading)
 
-    private val mainNavigationStates = MutableStateFlow<Routes>(Routes.GotoListingPage)
+    private val mainNavigationStates =
+            MutableStateFlow<Routes>(Routes.GotoListingPage)
+
 
     override fun getListOfCountries() {
         viewModelScope.launch {

@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.githubExamples.mvvm.acrhitecture.R
 import com.githubExamples.mvvm.acrhitecture.databinding.CountryListingFragmentBinding
-import com.githubExamples.mvvm.architecture.di.qualifiers.FilterZone
 import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import com.githubExamples.mvvm.architecture.navigation.Routes
 import com.githubExamples.mvvm.architecture.ui.CountryListStates
@@ -19,6 +18,7 @@ import com.githubExamples.mvvm.architecture.utils.hide
 import com.githubExamples.mvvm.architecture.utils.show
 import com.githubExamples.mvvm.architecture.utils.showAsPer
 import dagger.Lazy
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
@@ -31,6 +31,8 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
 
     @Inject
     lateinit var countryListAdapter: Lazy<CountryListAdapter>
+
+    private var uiStateJob: Job? = null
 
     override fun getFragmentTag() = TAG
 
@@ -50,10 +52,13 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewSates()
-        sharedViewModel.getListOfCountries()
         setUpView()
+        sharedViewModel.getListOfCountries()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        observeViewSates()
     }
 
     private fun setUpView() {
@@ -80,7 +85,7 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
 
     private fun observeViewSates() {
 
-        lifecycleScope.launchWhenCreated {
+        uiStateJob = lifecycleScope.launchWhenCreated {
             sharedViewModel.observeViewStates().collect { viewStates ->
                 when (viewStates) {
                     is CountryListStates.ShowLoading -> {
@@ -136,6 +141,11 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CountryListingFragmentBinding
         get() = CountryListingFragmentBinding::inflate
+
+    override fun onStop() {
+        uiStateJob?.cancel()
+        super.onStop()
+    }
 
 
 }
