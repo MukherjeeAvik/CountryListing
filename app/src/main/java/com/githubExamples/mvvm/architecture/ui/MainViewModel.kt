@@ -3,9 +3,12 @@ package com.githubExamples.mvvm.architecture.ui
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.viewModelScope
 import com.githubExamples.mvvm.architecture.domain.usecase.GetCountryListUseCase
+import com.githubExamples.mvvm.architecture.domain.usecase.Source
 import com.githubExamples.mvvm.architecture.domain.usecase.UseCaseWrapper
 import com.githubExamples.mvvm.architecture.navigation.Routes
 import com.githubExamples.mvvm.architecture.ui.base.BaseViewModel
+import com.githubExamples.mvvm.architecture.utils.NO_NETWORK
+import com.githubExamples.mvvm.architecture.utils.SOMETHING_WENT_WRONG
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -29,28 +32,29 @@ class MainViewModel @Inject constructor(
             when (val useCaseData = countryListUseCase.requestForData()) {
 
                 is UseCaseWrapper.Success -> {
-
+                    //retrieve data received for success
                     val listOfCountries = useCaseData.data.list
-                    val viewState = CountryListStates.ShowContent(
+                    val currentViewState = CountryListStates.ShowContent(
                             isLoading = false,
                             hasError = false,
                             errorMessage = "",
                             showList = true,
                             countryList = listOfCountries
                     )
-
-                    countryListViewStates.value = viewState
+                    //setting this view state as the current state of the stateFlow
+                    countryListViewStates.value = currentViewState
                 }
                 is UseCaseWrapper.Failed -> {
-                    val viewState = CountryListStates.ShowContent(
+                    //creating  a state for failed events
+                    val currentViewState = CountryListStates.ShowContent(
                             isLoading = false,
                             hasError = true,
                             errorMessage = useCaseData.reason.name,
                             showList = false,
                             countryList = ArrayList()
                     )
-
-                    countryListViewStates.value = viewState
+                    //setting this view state as the current state of the stateFlow
+                    countryListViewStates.value = currentViewState
                 }
             }
         }
@@ -63,7 +67,6 @@ class MainViewModel @Inject constructor(
     }
 
     override fun disposeOngoingOperationIfAny() {
-
     }
 
 

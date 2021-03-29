@@ -5,6 +5,8 @@ import com.githubExamples.mvvm.architecture.domain.GetCountryListingFromLocal
 import com.githubExamples.mvvm.architecture.utils.FILE_NOT_FOUND
 import io.reactivex.Completable
 import io.reactivex.Observable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.*
 import javax.inject.Inject
 
@@ -26,15 +28,16 @@ class FileRepository (
     }
 
     override suspend fun getDataFromLocal(): String {
-
+        return withContext(Dispatchers.IO) {
             val file = File(cacheDirectoryFile, fileName)
             if (!file.exists())
-               return FILE_NOT_FOUND
+                 FILE_NOT_FOUND
             else {
                 ObjectInputStream(FileInputStream(file)).use {
-                    return String(it.readBytes())
+                    String(it.readBytes())
                 }
             }
+        }
 
     }
 }

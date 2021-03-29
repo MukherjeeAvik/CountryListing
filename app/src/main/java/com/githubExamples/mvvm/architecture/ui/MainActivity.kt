@@ -29,7 +29,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(this, providerFactory).get(MainViewModel::class.java)
-        mainNavigator.openListingPage(R.id.fragmentContainer, false)
         observeRoutes()
         mainViewModel.registerNavigationRoutes(Routes.GotoListingPage)
 
