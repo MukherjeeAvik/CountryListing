@@ -8,4 +8,4 @@ Application uses MVVM architecture and below is the structire
 We fetch list of counries from an open API and cache it in the File System
 When there is no network we return the cached data
 If there is no data available in the cache we show user an error.
-The App uses Coroutines, retrofit along with dagger Android as tech stack.
+The App uses Coroutines, retrofit along with dagger Android along with viewBinding as tech stack.
