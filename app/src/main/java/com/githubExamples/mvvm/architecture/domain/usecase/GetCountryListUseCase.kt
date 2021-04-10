@@ -31,10 +31,15 @@ class GetCountryListUseCase @Inject constructor(
     override fun subscribeForData(vararg params: Any): Observable<UseCaseWrapper<DataWrapper>> {
         compositeDisposable.add(
             countryApiRepo.getData()
+                // don't block the main thread
                 .subscribeOn(schedulerProvider.computation())
+                // store API response to local storage
                 .flatMap { return@flatMap syncDataToLocal(it) }
+                // convert network layer models to domain models for UI consumption
                 .compose(transformCountryObjects())
+                // put data inside a wrapper for viewModel usage
                 .map { return@map mapToDataWrapper(Source.NETWORK, it) }
+                // get data from local storage in case api call throws error
                 .onErrorResumeNext(getDataFromLocal())
                 .subscribe({ wrappedData ->
                     // There is no internet and cached data is unavailable
