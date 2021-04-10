@@ -43,9 +43,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }
                     is Routes.GotoDetailsPage -> {
                         mainNavigator.openDetailsPage(
-                                R.id.fragmentContainer,
-                                true,
-                                routes.countryItem
+                            R.id.fragmentContainer,
+                            true,
+                            routes.countryItem
                         )
                     }
                     is Routes.GoBack -> {
@@ -63,6 +63,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override val bindingInflater: (LayoutInflater) -> ActivityMainBinding
         get() = ActivityMainBinding::inflate
-
-
 }

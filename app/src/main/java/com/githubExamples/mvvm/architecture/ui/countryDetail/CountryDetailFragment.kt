@@ -17,6 +17,20 @@ import kotlinx.android.synthetic.main.country_details_fragment.*
 import javax.inject.Inject
 
 class CountryDetailFragment() : BaseFragment<CountryDetailsFragmentBinding>() {
+
+    companion object {
+        const val TAG = "COUNTRY_DETAILS_FRAGMENT"
+        const val COUNTRY_DETAILS = "COUNTRY_DETAILS"
+        fun newInstance(countryItem: CountryItem): CountryDetailFragment {
+
+            val args = Bundle()
+            args.putParcelable(COUNTRY_DETAILS, countryItem)
+            val fragment = CountryDetailFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     lateinit var sharedViewModel: MainViewModel
 
     @Inject
@@ -27,14 +41,12 @@ class CountryDetailFragment() : BaseFragment<CountryDetailsFragmentBinding>() {
 
     override fun getLifeCycleObserver() = sharedViewModel
 
-    override fun reloadPage() {
-
-    }
+    override fun reloadPage() {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedViewModel =
-                ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
+            ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
     }
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CountryDetailsFragmentBinding
@@ -81,21 +93,5 @@ class CountryDetailFragment() : BaseFragment<CountryDetailsFragmentBinding>() {
                 languagesValues.text = languages.substringBeforeLast(",")
             }
         }
-
-
-    }
-
-    companion object {
-        const val TAG = "COUNTRY_DETAILS_FRAGMENT"
-        const val COUNTRY_DETAILS = "COUNTRY_DETAILS"
-        fun newInstance(countryItem: CountryItem): CountryDetailFragment {
-
-            val args = Bundle()
-            args.putParcelable(COUNTRY_DETAILS, countryItem)
-            val fragment = CountryDetailFragment()
-            fragment.arguments = args
-            return fragment
-        }
-
     }
 }

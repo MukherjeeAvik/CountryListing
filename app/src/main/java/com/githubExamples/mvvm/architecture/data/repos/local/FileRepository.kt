@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.*
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class FileRepository (
@@ -23,19 +24,23 @@ class FileRepository (
                 it.writeBytes(data)
             }
         } catch (ex: Exception) {
-
+           throw IllegalStateException("Cannot write to file!")
         }
     }
 
     override suspend fun getDataFromLocal(): String {
         return withContext(Dispatchers.IO) {
-            val file = File(cacheDirectoryFile, fileName)
-            if (!file.exists())
-                 FILE_NOT_FOUND
-            else {
-                ObjectInputStream(FileInputStream(file)).use {
-                    String(it.readBytes())
+            try {
+                val file = File(cacheDirectoryFile, fileName)
+                if (!file.exists())
+                    FILE_NOT_FOUND
+                else {
+                    ObjectInputStream(FileInputStream(file)).use {
+                        String(it.readBytes())
+                    }
                 }
+            } catch (ex:Exception) {
+                throw IllegalStateException("Cannot read from file!")
             }
         }
 

@@ -54,9 +54,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-
-            style="@style/noDataFoundStyle" />
+        <TextView style="@style/noDataFoundStyle" />
 
         <Button
             android:id="@+id/retryButton"
@@ -67,8 +65,7 @@
             android:paddingStart="@dimen/button_padding"
             android:paddingEnd="@dimen/button_padding"
             android:text="@string/retry"
-            android:textAppearance="@style/retryButtonText"
-            android:textColor="@color/white_color" />
+            android:textAppearance="@style/retryButtonText" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,16 @@ import javax.inject.Inject
 
 class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
 
+    companion object {
+        const val TAG = "COUNTRY_LIST_FRAGMENT"
+        fun newInstance(): CountryListFragment {
+            val args = Bundle()
+            val fragment = CountryListFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     lateinit var sharedViewModel: MainViewModel
 
     @Inject
@@ -47,7 +57,7 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedViewModel =
-                ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
+            ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,20 +81,7 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
         binding.regionHeader.text = requireContext().getString(R.string.regionText, "All over")
     }
 
-    companion object {
-        const val TAG = "COUNTRY_LIST_FRAGMENT"
-        fun newInstance(): CountryListFragment {
-
-            val args = Bundle()
-            val fragment = CountryListFragment()
-            fragment.arguments = args
-            return fragment
-        }
-
-    }
-
     private fun observeViewSates() {
-
         uiStateJob = lifecycleScope.launchWhenCreated {
             sharedViewModel.observeViewStates().collect { viewStates ->
                 when (viewStates) {
@@ -94,7 +91,6 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
                             pullToRefresh.hide()
                             noDataAvailable.hide()
                         }
-
                     }
                     is CountryListStates.ShowContent -> {
                         binding.apply {
@@ -117,26 +113,20 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
                                 pullToRefresh.hide()
                                 noDataAvailable.show()
                             }
-
                         }
 
                     }
                 }
-
             }
         }
-
-
     }
 
     private fun setUpAdapter(listOfCountries: List<CountryItem>) {
-
         countryListAdapter.get().registerCallback {
             sharedViewModel.registerNavigationRoutes(Routes.GotoDetailsPage(it))
         }
         countryListAdapter.get().addAll(listOfCountries)
         binding.countryListRv.adapter = countryListAdapter.get()
-
     }
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CountryListingFragmentBinding
@@ -146,6 +136,4 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
         uiStateJob?.cancel()
         super.onStop()
     }
-
-
 }
