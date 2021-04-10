@@ -82,7 +82,7 @@ class CountryListFragment : BaseFragment<CountryListingFragmentBinding>() {
     }
 
     private fun observeViewSates() {
-        uiStateJob = lifecycleScope.launchWhenCreated {
+        uiStateJob = lifecycleScope.launchWhenStarted {
             sharedViewModel.observeViewStates().collect { viewStates ->
                 when (viewStates) {
                     is CountryListStates.ShowLoading -> {
