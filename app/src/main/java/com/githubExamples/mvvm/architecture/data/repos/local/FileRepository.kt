@@ -21,8 +21,9 @@ class FileRepository @Inject constructor(
                 ObjectOutputStream(FileOutputStream(file)).use {
                     it.writeBytes(data)
                 }
+                emitter.onComplete()
             } catch (ex: Exception) {
-
+                emitter.onComplete()
             }
         }
     }

@@ -10,11 +10,11 @@ import com.githubExamples.mvvm.architecture.ui.MainViewModel
 import com.githubExamples.mvvm.architecture.ui.ViewStates
 import com.githubExamples.mvvm.architecture.ui.base.BaseFragment
 import com.githubExamples.mvvm.architecture.ui.base.BaseViewHolder
+import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
 import com.githubExamples.mvvm.architecture.utils.hide
 import com.githubExamples.mvvm.architecture.utils.show
 import com.githubExamples.mvvm.architecture.utils.showAsPer
 import kotlinx.android.synthetic.main.country_listing_fragment.*
-import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
 import javax.inject.Inject
 
 class CountryListFragment : BaseFragment() {
@@ -43,15 +43,15 @@ class CountryListFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         sharedViewModel =
             ViewModelProvider(requireActivity(), providerFactory).get(MainViewModel::class.java)
+        sharedViewModel.getListOfCountries()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewSates()
         setUpView()
-        sharedViewModel.getListOfCountries()
-
     }
+
 
     private fun setUpView() {
         pullToRefresh.setOnRefreshListener {
@@ -66,13 +66,11 @@ class CountryListFragment : BaseFragment() {
     companion object {
         const val TAG = "COUNTRY_LIST_FRAGMENT"
         fun newInstance(): CountryListFragment {
-
             val args = Bundle()
             val fragment = CountryListFragment()
             fragment.arguments = args
             return fragment
         }
-
     }
 
     private fun observeViewSates() {
@@ -112,12 +110,9 @@ class CountryListFragment : BaseFragment() {
             override fun onItemClicked(t: CountryItem) {
                 sharedViewModel.navigateToDetailsPage(t)
             }
-
         })
         countryListAdapter.addAll(listOfCountries)
         countryListRv.adapter = countryListAdapter
-
     }
-
 
 }

@@ -8,7 +8,7 @@ import com.githubExamples.mvvm.architecture.domain.entity.CountryItem
 import com.githubExamples.mvvm.architecture.ui.MainViewModel
 import com.githubExamples.mvvm.architecture.ui.base.BaseFragment
 import com.githubExamples.mvvm.architecture.utils.INCONSISTENT_VALUE
-import com.githubExamples.mvvm.architecture.utils.NOT_AVAIALBLE
+import com.githubExamples.mvvm.architecture.utils.NOT_AVAILABLE
 import kotlinx.android.synthetic.main.country_details_fragment.*
 import com.githubExamples.mvvm.architecture.ui.base.ViewModelProviderFactory
 import javax.inject.Inject
@@ -46,12 +46,12 @@ class CountryDetailFragment : BaseFragment() {
 
             countryName.text = countryDetails.name
             if (countryDetails.latitude == INCONSISTENT_VALUE.toString()) {
-                latitudeValue.text = NOT_AVAIALBLE
+                latitudeValue.text = NOT_AVAILABLE
             } else {
                 latitudeValue.text = countryDetails.latitude
             }
             if (countryDetails.longitude == INCONSISTENT_VALUE.toString()) {
-                longitudeValue.text = NOT_AVAIALBLE
+                longitudeValue.text = NOT_AVAILABLE
             } else {
                 longitudeValue.text = countryDetails.longitude
             }
@@ -61,7 +61,7 @@ class CountryDetailFragment : BaseFragment() {
                 borders = "$borders$it, "
             }
             if (borders.isEmpty())
-                bordersValues.text = NOT_AVAIALBLE
+                bordersValues.text = NOT_AVAILABLE
             else {
                 bordersValues.text = borders.substringBeforeLast(",")
             }
@@ -71,7 +71,7 @@ class CountryDetailFragment : BaseFragment() {
                 languages = "$languages$it, "
             }
             if (languages.isEmpty())
-                languagesValues.text = NOT_AVAIALBLE
+                languagesValues.text = NOT_AVAILABLE
             else {
                 languagesValues.text = languages.substringBeforeLast(",")
             }
