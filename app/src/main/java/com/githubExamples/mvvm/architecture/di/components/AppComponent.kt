@@ -1,10 +1,10 @@
 package com.githubExamples.mvvm.architecture.di.components
 
-import com.githubExamples.mvvm.architecture.di.modules.RetrofitModule
 import android.app.Application
 import com.githubExamples.mvvm.architecture.MyApplication
 import com.githubExamples.mvvm.architecture.di.ActivityBuilderModule
 import com.githubExamples.mvvm.architecture.di.modules.AppModule
+import com.githubExamples.mvvm.architecture.di.modules.RetrofitModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -27,6 +27,4 @@ interface AppComponent : AndroidInjector<MyApplication> {
 
         fun build(): AppComponent
     }
-
-
 }

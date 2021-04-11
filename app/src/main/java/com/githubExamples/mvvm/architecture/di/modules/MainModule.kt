@@ -12,7 +12,6 @@ class MainModule {
     @Provides
     fun provideFragmentManager(activity: MainActivity): FragmentManager =
         (activity as AppCompatActivity).supportFragmentManager
-
 }
 
 

@@ -1,19 +1,16 @@
 package com.githubExamples.mvvm.architecture.di.modules
 
 import android.app.Application
-import com.githubExamples.mvvm.acrhitecture.BuildConfig
-import com.githubExamples.mvvm.architecture.di.qualifiers.BaseUrl
 import com.githubExamples.mvvm.architecture.data.repos.remote.ApiService
-import com.githubExamples.mvvm.architecture.utils.*
-
+import com.githubExamples.mvvm.architecture.data.repos.remote.utils.RequestInterceptor
+import com.githubExamples.mvvm.architecture.di.qualifiers.BaseUrl
+import com.githubExamples.mvvm.architecture.utils.BASE_URL
 import dagger.Module
 import dagger.Provides
-import com.githubExamples.mvvm.architecture.data.repos.remote.utils.RequestInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton

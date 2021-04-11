@@ -24,5 +24,4 @@ abstract class ActivityBuilderModule {
             CountryDetailProvider::class]
     )
     abstract fun bindMainActivity(): MainActivity
-
 }
