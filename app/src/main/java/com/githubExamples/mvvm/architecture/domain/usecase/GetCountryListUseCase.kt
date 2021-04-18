@@ -28,7 +28,7 @@ class GetCountryListUseCase @Inject constructor(
         fileRepository.fileName = COUNTRY_LIST_FILE_NAME
     }
 
-    override fun subscribeForData(vararg params: Any): Observable<UseCaseWrapper<DataWrapper>> {
+    override fun subscribeForData(): Observable<UseCaseWrapper<DataWrapper>> {
         compositeDisposable.add(
             countryApiRepo.getData()
                 // don't block the main thread

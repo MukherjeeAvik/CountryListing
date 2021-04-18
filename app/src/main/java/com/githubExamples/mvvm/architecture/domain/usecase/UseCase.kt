@@ -11,7 +11,7 @@ abstract class UseCase<T> {
     protected val compositeDisposable by lazy { CompositeDisposable() }
 
 
-    abstract fun subscribeForData(vararg params: Any): Observable<T>
+    abstract fun subscribeForData(): Observable<T>
     fun unsubscribeFromDataSource() {
         compositeDisposable.clear()
     }
